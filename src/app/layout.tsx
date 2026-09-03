@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { portfolio } from "@/data/portfolio";
 import "./globals.css";
@@ -44,8 +45,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col" id="top">
         <Header />
-        {/* Offset for the fixed h-16 header. */}
+        {/* Offset for the fixed h-16 header. flex-1 pushes the footer to the
+            bottom of the viewport on short pages. */}
         <div className="flex flex-1 flex-col pt-16">{children}</div>
+        <Footer />
       </body>
     </html>
   );
