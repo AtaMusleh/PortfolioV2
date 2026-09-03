@@ -1,5 +1,6 @@
 import About from "@/components/About";
 import Education from "@/components/Education";
+import Experience from "@/components/Experience";
 import Hero from "@/components/Hero";
 
 export default function Home() {
@@ -8,7 +9,13 @@ export default function Home() {
       <Hero />
       <About />
       <Education />
-      {/* Remaining sections land here: #projects, #experience, #contact. */}
+      {/*
+       * #projects goes HERE, before Experience — the header's scroll-spy
+       * resolves ties by NAV_LINKS order, so document order has to match the
+       * nav (About, Education, Projects, Experience, Contact).
+       */}
+      <Experience />
+      {/* #contact goes last. */}
     </main>
   );
 }

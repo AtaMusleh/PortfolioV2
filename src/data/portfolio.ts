@@ -146,13 +146,15 @@ export const portfolio: Portfolio = {
       company: "Experts Turnkey Solutions",
       period: "October 2025 — Present",
       location: "Ramallah, Palestine",
+      // Jordan Kuwait Bank is a client of Experts Turnkey Solutions, not an
+      // employer. Keep that relationship explicit in any rewording.
       description:
-        "Building banking applications on the Appian platform for clients like Jordan Kuwait Bank",
+        "Building banking applications on the Appian platform for clients including Jordan Kuwait Bank.",
       bullets: [
-        "Design SAIL interfaces used by branch and back-office staff",
-        "Write expression rules encoding banking logic and validation",
+        "Design SAIL interfaces used daily by branch and back-office staff",
+        "Write expression rules encoding banking logic, validation, and data transformation",
         "Model record types and process models against core banking data",
-        "Ship production software where correctness is critical",
+        "Ship production software where correctness and auditability are requirements",
       ],
     },
   ],
