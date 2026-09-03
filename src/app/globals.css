@@ -1,8 +1,30 @@
 @import "tailwindcss";
 
+/*
+ * Tailwind v4 resolves `dark:` from the OS preference by default. The header's
+ * toggle writes a `.dark` class on <html>, so point the variant at that class
+ * instead — otherwise the toggle would have no effect on any `dark:` utility.
+ */
+@custom-variant dark (&:is(.dark *));
+
+/* Brand palette. Change these two values to re-skin the whole site. */
+@theme {
+  --color-brand-pink: #ec4899;
+  --color-brand-purple: #a855f7;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/*
+ * Class-driven, not `prefers-color-scheme`: the inline script in layout.tsx
+ * resolves stored preference + OS setting into this class before first paint.
+ */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,10 +34,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+  /* Clears the fixed header (h-16) so anchored sections aren't hidden under it. */
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
