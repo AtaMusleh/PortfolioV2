@@ -28,7 +28,7 @@ export default function Projects() {
   return (
     <section id="projects" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-neutral-50">
+        <h2 className="text-center text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
           Projects
           <span
             aria-hidden

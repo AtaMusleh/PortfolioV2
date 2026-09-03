@@ -29,7 +29,7 @@ export default function About() {
   return (
     <section id="about" className="px-6 py-24 sm:py-32">
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-neutral-50">
+        <h2 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
           About Me
           {/* Short gradient rule, echoing the hero's palette. */}
           <span

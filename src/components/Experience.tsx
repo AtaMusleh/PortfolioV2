@@ -19,7 +19,7 @@ export default function Experience() {
   return (
     <section id="experience" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-3xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-neutral-50">
+        <h2 className="text-center text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
           Experience
           <span
             aria-hidden
@@ -41,7 +41,7 @@ export default function Experience() {
                 className="absolute left-0 top-6 h-4 w-4 rounded-full border-2 border-brand-pink bg-white dark:border-brand-purple dark:bg-neutral-950"
               />
 
-              <article className="rounded-2xl border border-black/5 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
+              <article className="rounded-2xl border border-black/5 bg-white/60 p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
                 {/* Header: stacks on mobile, period moves top-right on sm+. */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex items-start gap-4">
@@ -75,7 +75,7 @@ export default function Experience() {
                   {job.description}
                 </p>
 
-                <ul className="mt-4 flex flex-col gap-2.5">
+                <ul className="mt-5 flex flex-col gap-4">
                   {job.bullets.map((bullet) => (
                     <li
                       key={bullet}

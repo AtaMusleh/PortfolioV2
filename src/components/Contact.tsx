@@ -59,9 +59,9 @@ const METHODS: readonly ContactMethod[] = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="px-6 py-24 sm:py-32">
+    <section id="contact" className="px-6 py-32 sm:py-44">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-neutral-50">
+        <h2 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
           Get in touch
           <span
             aria-hidden
@@ -73,7 +73,7 @@ export default function Contact() {
           Let&apos;s work together
         </p>
 
-        <ul className="mt-10 grid gap-4 sm:grid-cols-3">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-3">
           {METHODS.map((method) => (
             <li key={method.label}>
               <a
@@ -83,7 +83,7 @@ export default function Contact() {
                 {...(method.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="group flex h-full flex-col items-center gap-3 rounded-2xl border border-black/5 bg-white/60 px-4 py-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50"
+                className="group flex h-full flex-col items-center gap-4 rounded-2xl border border-black/5 bg-white/60 px-6 py-9 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50"
               >
                 <span
                   aria-hidden

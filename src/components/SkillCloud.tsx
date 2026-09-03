@@ -306,7 +306,7 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
       <div
         ref={containerRef}
         aria-hidden
-        className="h-[340px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[440px]"
+        className="h-[440px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[580px]"
       />
       <p className="text-xs text-neutral-500 dark:text-neutral-500">
         Drag to rotate
