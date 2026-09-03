@@ -83,12 +83,25 @@ export interface Project {
   readonly name: string;
   /** One line: what it is, and the thing that makes it interesting. */
   readonly tagline: string;
+  /** One or two sentences on what the thing actually does, for the card body. */
+  readonly description: string;
+  /**
+   * The single highlight featured on the project card. Kept separate from
+   * `highlights` so the card's pick doesn't depend on that array's ordering.
+   */
+  readonly keyHighlight: string;
   readonly year: number;
   /** Display order is the order you write them in. */
   readonly stack: readonly string[];
   readonly repos: readonly ProjectRepo[];
   /** Deployed URL, or `null` if there is nothing to show yet. */
   readonly liveUrl: Url | null;
+  /**
+   * Screenshot under /public, e.g. "/projects/roam.png". Use `null` until the
+   * file exists — the card falls back to a gradient tile rather than a broken
+   * image. Landscape works best; cards crop to 16:10.
+   */
+  readonly image: string | null;
   /** The technically interesting decisions. These are the selling points. */
   readonly highlights: readonly string[];
 }
@@ -166,6 +179,10 @@ export const portfolio: Portfolio = {
       id: "roam",
       name: "Roam",
       tagline: "Geotagged photos, clustered into an interactive journey map",
+      description:
+        "Reads the EXIF GPS out of a batch of photos and groups them into the places you actually stopped, then draws the route between those stops on a map.",
+      keyHighlight: "DBSCAN clustering with haversine distance",
+      image: "/projects/roam.png",
       year: 2025,
       stack: [
         "Next.js 16",
@@ -188,7 +205,11 @@ export const portfolio: Portfolio = {
     {
       id: "taskflow",
       name: "TaskFlow",
-      tagline: "Kanban task manager with separate API and client deployment",
+      tagline: "Kanban task manager with separate API and client",
+      description:
+        "A drag-and-drop Kanban board, shipped as an Express API and a React client that deploy independently and authenticate over JWT.",
+      keyHighlight: "Fractional indexing for card ordering",
+      image: "/projects/taskflow.png",
       year: 2025,
       stack: ["Express", "React", "TypeScript", "PostgreSQL", "Zod", "JWT"],
       repos: [
@@ -206,7 +227,11 @@ export const portfolio: Portfolio = {
     {
       id: "linksnip",
       name: "LinkSnip",
-      tagline: "URL shortener with click analytics that counts every click",
+      tagline: "URL shortener with click analytics",
+      description:
+        "Turns long URLs into short slugs and records every visit — including the ones that would normally be lost when a serverless function returns its redirect and shuts down.",
+      keyHighlight: "Accurate click tracking in a serverless environment",
+      image: "/projects/linksnip.png",
       year: 2025,
       stack: ["Next.js 16", "TypeScript", "PostgreSQL", "Prisma"],
       repos: [{ label: "Repo", url: "https://github.com/AtaMusleh/linksnip" }],
@@ -220,7 +245,11 @@ export const portfolio: Portfolio = {
     {
       id: "fx-convert",
       name: "FX Convert",
-      tagline: "Currency converter with historical ECB rate charts",
+      tagline: "Currency converter with ECB rate charts",
+      description:
+        "Converts between currencies and charts how the pair has moved over time, using the European Central Bank's published daily reference rates.",
+      keyHighlight: "Server-side rate caching",
+      image: "/projects/fx-convert.png",
       year: 2025,
       stack: ["Next.js 16", "TypeScript", "Tailwind", "Recharts"],
       repos: [{ label: "Repo", url: "https://github.com/AtaMusleh/fx-convert" }],
