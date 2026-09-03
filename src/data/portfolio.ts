@@ -37,6 +37,8 @@ export interface PersonalInfo {
   readonly availability: string;
   /** Hero line. Keep it to a single sentence. */
   readonly tagline: string;
+  /** About-section bio. Two or three sentences, first person. */
+  readonly bio: string;
 }
 
 export interface Education {
@@ -121,6 +123,7 @@ export const portfolio: Portfolio = {
       "Open to remote roles internationally, and relocation with visa sponsorship.",
     tagline:
       "I build things end to end, and care most about the parts that are easy to get subtly wrong.",
+    bio: "I studied computer science at Birzeit University and now build banking software at Experts Turnkey Solutions in Ramallah, working on Appian applications for clients like Jordan Kuwait Bank. The part of the job I actually enjoy is the unglamorous half — validation rules, edge cases, and the things that fail quietly rather than loudly. Away from the keyboard I lift and I game.",
   },
 
   education: [
