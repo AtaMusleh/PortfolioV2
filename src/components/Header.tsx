@@ -17,6 +17,8 @@ import { portfolio } from "@/data/portfolio";
 /** Order here is display order. `id` is both the anchor target and the key. */
 const NAV_LINKS = [
   { id: "about", label: "About" },
+  { id: "education", label: "Education" },
+  { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "contact", label: "Contact" },

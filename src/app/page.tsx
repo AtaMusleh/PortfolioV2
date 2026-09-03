@@ -12,9 +12,9 @@ export default function Home() {
       <About />
       <Education />
       {/*
-       * Projects sits before Experience — the header's scroll-spy resolves
-       * ties by NAV_LINKS order, so document order has to match the nav
-       * (About, Education, Projects, Experience, Contact).
+       * #skills goes HERE, between Education and Projects — the header's
+       * scroll-spy resolves ties by NAV_LINKS order, so document order has to
+       * match the nav (About, Education, Skills, Projects, Experience, Contact).
        */}
       <Projects />
       <Experience />
