@@ -59,13 +59,13 @@ const METHODS: readonly ContactMethod[] = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="px-6 py-32 sm:py-44">
+    <section id="contact" className="px-6 py-36 sm:py-52">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
+        <h2 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-50">
           Get in touch
           <span
             aria-hidden
-            className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+            className="mx-auto mt-5 block h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
           />
         </h2>
 
@@ -83,26 +83,26 @@ export default function Contact() {
                 {...(method.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="group flex h-full flex-col items-center gap-4 rounded-2xl border border-black/5 bg-white/60 px-6 py-9 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50"
+                className="group flex h-full flex-col items-center gap-3 rounded-2xl border border-black/5 bg-white/60 p-8 backdrop-blur-sm sm:p-10 transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50"
               >
                 <span
                   aria-hidden
-                  className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-brand-pink/15 to-brand-purple/15 text-brand-purple transition-transform duration-300 group-hover:scale-110"
+                  className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-brand-pink/15 to-brand-purple/15 text-brand-purple transition-transform duration-300 group-hover:scale-110"
                 >
-                  <method.icon className="h-5 w-5" />
+                  <method.icon className="h-8 w-8" />
                 </span>
 
-                <span className="inline-flex items-center gap-1 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+                <span className="inline-flex items-center gap-1.5 text-lg font-semibold text-neutral-900 dark:text-neutral-50">
                   {method.label}
                   <FiArrowUpRight
                     aria-hidden
-                    className="h-3.5 w-3.5 text-neutral-400 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-pink"
+                    className="h-4 w-4 text-neutral-400 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-pink"
                   />
                 </span>
 
                 {/* break-all: the LinkedIn slug is long and would otherwise
                     push the card wider than its grid column. */}
-                <span className="text-xs break-all text-neutral-600 dark:text-neutral-400">
+                <span className="text-sm break-all text-neutral-600 dark:text-neutral-400">
                   {method.display}
                 </span>
               </a>
@@ -110,7 +110,7 @@ export default function Contact() {
           ))}
         </ul>
 
-        <p className="mt-10 inline-flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-12 inline-flex items-center gap-2.5 text-base text-neutral-600 dark:text-neutral-400">
           <FiMapPin aria-hidden className="h-4 w-4 shrink-0 text-brand-purple" />
           Based in {portfolio.personal.location}
         </p>

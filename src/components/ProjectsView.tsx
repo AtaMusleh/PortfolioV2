@@ -56,9 +56,9 @@ function getServerReducedMotion(): boolean {
 /* --- Carousel geometry -------------------------------------------------- */
 
 /** Horizontal step per card, as a percentage of card width. */
-const STEP_PERCENT = 62;
+const STEP_PERCENT = 72;
 const SIDE_ROTATION = 30;
-const SIDE_SCALE = 0.88;
+const SIDE_SCALE = 0.76;
 /** How far a drag must travel before it counts as a swipe. */
 const SWIPE_THRESHOLD = 60;
 /** Movement past this suppresses the click that would otherwise open a card. */
@@ -73,11 +73,11 @@ function cardStyle(offset: number, dragPx: number): CSSProperties {
   return {
     transform: [
       `translateX(calc(-50% + ${offset * STEP_PERCENT}% + ${dragPx}px))`,
-      `translateZ(${isCentre ? "0px" : "-160px"})`,
+      `translateZ(${isCentre ? "0px" : "-240px"})`,
       `rotateY(${offset * -SIDE_ROTATION}deg)`,
       `scale(${isCentre ? 1 : SIDE_SCALE})`,
     ].join(" "),
-    opacity: isHidden ? 0 : isCentre ? 1 : 0.5,
+    opacity: isHidden ? 0 : isCentre ? 1 : 0.45,
     zIndex: 10 - distance,
     // visibility (not just opacity) also takes hidden cards out of the tab
     // order and the accessibility tree.
@@ -165,10 +165,19 @@ export default function ProjectsView({
 
   /* --- Pieces ------------------------------------------------------------ */
 
-  /** Card plus the overlay button that opens its details. */
-  function clickableCard(item: ProjectViewItem) {
+  /**
+   * Card plus the overlay button that opens its details.
+   *
+   * `opaque` is for the carousel: ProjectCard is glassmorphic (bg-white/60),
+   * and inside a preserve-3d context the card behind shows straight through
+   * it — the neighbouring slide's text reads over the featured one. An opaque
+   * layer behind the card blocks that without touching the grid's glass look.
+   */
+  function clickableCard(item: ProjectViewItem, opaque = false) {
     return (
-      <div className="relative h-full">
+      <div
+        className={`relative h-full ${opaque ? "rounded-2xl bg-white dark:bg-neutral-950" : ""}`}
+      >
         {item.card}
         {/*
          * A sibling of the card, not a wrapper: the card contains links, and
@@ -242,7 +251,7 @@ export default function ProjectsView({
             onClickCapture={onClickCapture}
             // touch-pan-y keeps vertical page scrolling working over the
             // carousel while horizontal drags are handled here.
-            className="relative h-[600px] touch-pan-y select-none rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-pink sm:h-[620px]"
+            className="relative h-[800px] touch-pan-y select-none overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink sm:h-[820px]"
             style={{ perspective: "1600px" }}
           >
             <ul className="relative h-full [transform-style:preserve-3d]">
@@ -253,14 +262,14 @@ export default function ProjectsView({
                     key={item.id}
                     aria-label={`${index + 1} of ${items.length}`}
                     style={cardStyle(offset, dragPx)}
-                    className={`absolute left-1/2 top-0 h-full w-[min(88%,26rem)] ${
+                    className={`absolute left-1/2 top-0 h-full w-[min(94%,34rem)] ${
                       // No transition mid-drag, so cards track the finger.
                       dragPx === 0
                         ? "transition-[transform,opacity] duration-500 ease-out"
                         : ""
                     }`}
                   >
-                    {clickableCard(item)}
+                    {clickableCard(item, true)}
                   </li>
                 );
               })}

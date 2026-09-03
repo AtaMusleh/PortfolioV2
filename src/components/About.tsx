@@ -29,12 +29,12 @@ export default function About() {
   return (
     <section id="about" className="px-6 py-24 sm:py-32">
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-        <h2 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
+        <h2 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-50">
           About Me
           {/* Short gradient rule, echoing the hero's palette. */}
           <span
             aria-hidden
-            className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+            className="mx-auto mt-5 block h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
           />
         </h2>
 

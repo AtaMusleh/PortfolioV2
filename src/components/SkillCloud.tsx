@@ -53,6 +53,15 @@ function getServerReducedMotion(): boolean {
 /* --- Scene constants --------------------------------------------------- */
 
 const SPHERE_RADIUS = 2;
+/** Vertical field of view, degrees. Shared by the camera and fitDistance. */
+const FOV = 55;
+/**
+ * Half-extents the frame has to contain, in world units. The horizontal one is
+ * larger than the sphere radius because a label sprite sticks out well past the
+ * point it is anchored to — "OpenStreetMap" is nearly two units wide by itself.
+ */
+const HORIZONTAL_EXTENT = 3;
+const VERTICAL_EXTENT = 2.2;
 /** World height of a label sprite; width follows from the texture's aspect. */
 const LABEL_HEIGHT = 0.32;
 /** Idle drift, radians per frame. */
@@ -60,6 +69,24 @@ const IDLE_SPIN = 0.0016;
 const DRAG_SENSITIVITY = 0.005;
 /** Stops the sphere tipping far enough to turn labels upside down. */
 const MAX_TILT = 0.6;
+
+/**
+ * Camera distance that keeps the whole cloud inside the frame at any aspect
+ * ratio.
+ *
+ * A fixed distance crops labels off the sides on a phone: the vertical field of
+ * view is what's fixed, so the horizontal one narrows as the viewport does, and
+ * the widest labels fall outside it. Deriving distance from whichever axis is
+ * tighter lets the sphere fill as much of the frame as it can without ever
+ * clipping a label.
+ */
+function fitDistance(aspect: number): number {
+  const halfHeight = Math.tan((FOV * Math.PI) / 180 / 2);
+  const halfWidth = halfHeight * aspect;
+  return (
+    Math.max(HORIZONTAL_EXTENT / halfWidth, VERTICAL_EXTENT / halfHeight) * 1.05
+  );
+}
 
 /**
  * Renders one label to a canvas and wraps it in a texture.
@@ -129,8 +156,8 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
     /* --- Scene ------------------------------------------------------- */
 
     const scene = new Scene();
-    const camera = new PerspectiveCamera(55, width / height, 0.1, 100);
-    camera.position.z = 5.4;
+    const camera = new PerspectiveCamera(FOV, width / height, 0.1, 100);
+    camera.position.z = fitDistance(camera.aspect);
 
     const renderer = new WebGLRenderer({ alpha: true, antialias: true });
     // Capped: uncapped DPR on a 3x phone screen triples the fill cost for no
@@ -258,6 +285,8 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
       if (nextWidth === 0 || nextHeight === 0) return;
 
       camera.aspect = nextWidth / nextHeight;
+      // Refit, or rotating to portrait would start clipping labels again.
+      camera.position.z = fitDistance(camera.aspect);
       camera.updateProjectionMatrix();
       renderer.setSize(nextWidth, nextHeight);
     });
@@ -306,7 +335,7 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
       <div
         ref={containerRef}
         aria-hidden
-        className="h-[440px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[580px]"
+        className="h-[360px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[720px]"
       />
       <p className="text-xs text-neutral-500 dark:text-neutral-500">
         Drag to rotate

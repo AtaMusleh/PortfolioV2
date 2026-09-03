@@ -20,11 +20,11 @@ export default function Skills() {
   return (
     <section id="skills" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
+        <h2 className="text-center text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-50">
           Skills
           <span
             aria-hidden
-            className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+            className="mx-auto mt-5 block h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
           />
         </h2>
 
@@ -32,19 +32,19 @@ export default function Skills() {
           <SkillCloud labels={allSkills} />
         </div>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2">
+        <ul className="mt-12 grid items-start gap-6 sm:grid-cols-2">
           {portfolio.skills.map((group) => (
             <li key={group.name}>
-              <article className="flex h-full flex-col rounded-2xl border border-black/5 bg-white/60 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
+              <article className="flex flex-col rounded-2xl border border-black/5 bg-white/60 p-6 backdrop-blur-sm sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
                 <h3 className="text-sm font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-500">
                   {group.name}
                 </h3>
 
-                <ul className="mt-3 flex flex-wrap gap-2">
+                <ul className="mt-4 flex flex-wrap gap-2.5">
                   {group.skills.map((skill) => (
                     <li
                       key={skill}
-                      className="rounded-full bg-brand-pink/10 px-3 py-1.5 text-sm font-medium text-brand-pink transition-colors duration-200 dark:bg-brand-purple/15 dark:text-brand-purple"
+                      className="rounded-full bg-brand-pink/10 px-4 py-2 text-base font-medium text-brand-pink transition-colors duration-200 dark:bg-brand-purple/15 dark:text-brand-purple"
                     >
                       {skill}
                     </li>

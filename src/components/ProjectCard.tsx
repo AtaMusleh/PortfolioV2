@@ -31,42 +31,42 @@ export default function ProjectCard({ project }: { readonly project: Project }) 
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
       {/* Positioned + fixed ratio: required by <Image fill>, and it reserves
           the space so the grid doesn't shift while loading. */}
-      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden border-b border-black/5 dark:border-white/10">
+      <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden border-b border-black/5 dark:border-white/10">
         <ProjectImage src={project.image} name={project.name} />
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">
+          <h3 className="text-xl font-semibold text-neutral-900 sm:text-2xl dark:text-neutral-50">
             {project.name}
           </h3>
-          <span className="shrink-0 text-xs font-medium text-neutral-500 dark:text-neutral-500">
+          <span className="shrink-0 text-sm font-medium text-neutral-500 dark:text-neutral-500">
             {project.year}
           </span>
         </div>
 
-        <p className="mt-1 text-sm font-medium text-brand-purple">
+        <p className="mt-1.5 text-base font-medium text-brand-purple">
           {project.tagline}
         </p>
 
-        <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+        <p className="mt-4 text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
           {project.description}
         </p>
 
         {/* Featured technical detail — the reason the project is here. */}
-        <p className="mt-4 flex items-start gap-2 rounded-lg bg-brand-pink/5 px-3 py-2 text-xs leading-relaxed text-neutral-700 dark:bg-brand-purple/10 dark:text-neutral-300">
+        <p className="mt-5 flex items-start gap-2.5 rounded-xl bg-brand-pink/5 px-4 py-3 text-sm leading-relaxed text-neutral-700 dark:bg-brand-purple/10 dark:text-neutral-300">
           <FiZap
             aria-hidden
-            className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-pink dark:text-brand-purple"
+            className="mt-1 h-4 w-4 shrink-0 text-brand-pink dark:text-brand-purple"
           />
           {project.keyHighlight}
         </p>
 
-        <ul className="mt-4 flex flex-wrap gap-2">
+        <ul className="mt-5 flex flex-wrap gap-2.5">
           {project.stack.map((tech, index) => (
             <li
               key={tech}
-              className={`rounded-full px-2.5 py-1 text-xs font-medium ${tagClasses(index)}`}
+              className={`rounded-full px-3.5 py-1.5 text-sm font-medium ${tagClasses(index)}`}
             >
               {tech}
             </li>
@@ -81,7 +81,7 @@ export default function ProjectCard({ project }: { readonly project: Project }) 
          * button that ProjectsView lays over the card — without it, that
          * overlay would swallow every click on a repo or demo link.
          */}
-        <div className="relative z-10 mt-auto flex flex-wrap items-center gap-4 pt-5">
+        <div className="relative z-10 mt-auto flex flex-wrap items-center gap-5 pt-6">
           {project.repos.map((repo) => (
             <a
               key={repo.url}

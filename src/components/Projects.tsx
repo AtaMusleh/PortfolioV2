@@ -28,11 +28,11 @@ export default function Projects() {
   return (
     <section id="projects" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl dark:text-neutral-50">
+        <h2 className="text-center text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-50">
           Projects
           <span
             aria-hidden
-            className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+            className="mx-auto mt-5 block h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
           />
         </h2>
 
