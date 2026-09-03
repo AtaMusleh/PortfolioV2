@@ -231,4 +231,30 @@ export const portfolio: Portfolio = {
   },
 };
 
+/* ------------------------------------------------------------------ */
+/* Derived values                                                     */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Age in whole years, derived from `personal.birthDate`.
+ *
+ * Never write the number down anywhere — it goes stale every 4th of March.
+ * Prefer calling this from a Server Component; in a client component the
+ * value is computed against the visitor's clock, which can disagree with the
+ * server-rendered HTML across a timezone boundary on a birthday.
+ */
+export function getAge(today: Date = new Date()): number {
+  // Split rather than `new Date(string)`: that parses as UTC midnight and then
+  // reads back in local time, landing on the previous day west of Greenwich.
+  const [year, month, day] = portfolio.personal.birthDate.split("-").map(Number);
+
+  let age = today.getFullYear() - year;
+  const hasHadBirthday =
+    today.getMonth() + 1 > month ||
+    (today.getMonth() + 1 === month && today.getDate() >= day);
+  if (!hasHadBirthday) age -= 1;
+
+  return age;
+}
+
 export default portfolio;
