@@ -44,9 +44,12 @@ export interface PersonalInfo {
 export interface Education {
   readonly degree: string;
   readonly institution: string;
+  /** Campus location, "City, Country". */
+  readonly location: string;
   /** Four-digit year the programme started. */
   readonly startYear: number;
-  /** Four-digit year it ended. Use `null` while still enrolled. */
+  /** Four-digit year it ended. Use `null` while still enrolled — the UI
+   *  renders that as "Present". */
   readonly endYear: number | null;
 }
 
@@ -130,6 +133,7 @@ export const portfolio: Portfolio = {
     {
       degree: "BSc Computer Science",
       institution: "Birzeit University",
+      location: "Birzeit, Palestine",
       startYear: 2021,
       endYear: 2025,
     },
