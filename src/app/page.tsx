@@ -4,6 +4,7 @@ import Education from "@/components/Education";
 import Experience from "@/components/Experience";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
 
 export default function Home() {
   return (
@@ -12,10 +13,11 @@ export default function Home() {
       <About />
       <Education />
       {/*
-       * #skills goes HERE, between Education and Projects — the header's
-       * scroll-spy resolves ties by NAV_LINKS order, so document order has to
-       * match the nav (About, Education, Skills, Projects, Experience, Contact).
+       * Order is load-bearing: the header's scroll-spy resolves ties by
+       * NAV_LINKS order, so document order has to match the nav
+       * (About, Education, Skills, Projects, Experience, Contact).
        */}
+      <Skills />
       <Projects />
       <Experience />
       <Contact />

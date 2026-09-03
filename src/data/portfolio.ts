@@ -106,6 +106,13 @@ export interface Project {
   readonly highlights: readonly string[];
 }
 
+export interface SkillGroup {
+  /** Card heading, e.g. "Database & ORM". */
+  readonly name: string;
+  /** Display order is the order you write them in. */
+  readonly skills: readonly string[];
+}
+
 export interface Contact {
   readonly email: string;
   readonly github: Url;
@@ -119,6 +126,8 @@ export interface Portfolio {
   readonly experience: readonly Experience[];
   /** Short labels only — these render as chips, not sentences. */
   readonly interests: readonly string[];
+  /** One card per group; the word cloud uses every skill across all groups. */
+  readonly skills: readonly SkillGroup[];
   readonly projects: readonly Project[];
   readonly contact: Contact;
 }
@@ -173,6 +182,20 @@ export const portfolio: Portfolio = {
   ],
 
   interests: ["Lifting", "Gaming"],
+
+  skills: [
+    { name: "Languages", skills: ["TypeScript", "JavaScript", "SQL"] },
+    {
+      name: "Frontend",
+      skills: ["React", "Next.js", "Tailwind CSS", "GSAP", "Recharts"],
+    },
+    { name: "Backend", skills: ["Node.js", "Express"] },
+    { name: "Database & ORM", skills: ["PostgreSQL", "Prisma"] },
+    { name: "Auth & Validation", skills: ["JWT", "Zod"] },
+    { name: "APIs & Maps", skills: ["Mapbox", "OpenStreetMap"] },
+    { name: "Enterprise", skills: ["Appian", "SAIL"] },
+    { name: "Tooling & Deploy", skills: ["Git", "Vercel"] },
+  ],
 
   projects: [
     {

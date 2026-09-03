@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { FiMenu, FiMoon, FiSun, FiX } from "react-icons/fi";
 import { portfolio } from "@/data/portfolio";
+import {
+  getServerTheme,
+  getTheme,
+  subscribeToTheme,
+  type Theme,
+} from "@/lib/theme";
 
 /**
  * Fixed site header: brand, section nav with an active indicator, theme
@@ -24,35 +30,8 @@ const NAV_LINKS = [
   { id: "contact", label: "Contact" },
 ] as const;
 
-type Theme = "light" | "dark";
-
 /** Must match the key read by the no-flash script in app/layout.tsx. */
 const THEME_STORAGE_KEY = "theme";
-
-/*
- * The `.dark` class on <html> is the source of truth — the no-flash script sets
- * it before React exists. Subscribing to it (rather than mirroring it into
- * state) means there is only ever one answer to "what theme is this?", and
- * useSyncExternalStore handles the server/client difference without a
- * hydration mismatch.
- */
-function subscribeToTheme(onChange: () => void) {
-  const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-  return () => observer.disconnect();
-}
-
-function getTheme(): Theme {
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-/** The server has no DOM and no localStorage; light is the pre-hydration guess. */
-function getServerTheme(): Theme {
-  return "light";
-}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
