@@ -210,7 +210,13 @@ export const portfolio: Portfolio = {
   ],
 
   skills: [
-    { name: "Languages", skills: ["TypeScript", "JavaScript", "SQL"] },
+    {
+      // Merged into the old "Languages" group rather than added alongside it,
+      // so TypeScript and JavaScript aren't listed twice. SQL stays here: it
+      // was already in this group and nothing asked for it to be dropped.
+      name: "Primary Languages",
+      skills: ["TypeScript", "JavaScript", "Java", "HTML5", "CSS3", "SQL"],
+    },
     {
       name: "Frontend",
       skills: ["React", "Next.js", "Tailwind CSS", "GSAP", "Recharts"],
@@ -221,6 +227,9 @@ export const portfolio: Portfolio = {
     { name: "APIs & Maps", skills: ["Mapbox", "OpenStreetMap"] },
     { name: "Enterprise", skills: ["Appian", "SAIL"] },
     { name: "Tooling & Deploy", skills: ["Git", "Vercel"] },
+    // Last on purpose: the label says these are secondary, so they read that
+    // way only if they sit after the groups that aren't.
+    { name: "Familiar With", skills: ["Python", "C", "PHP"] },
   ],
 
   projects: [
