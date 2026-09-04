@@ -19,7 +19,7 @@ export default function Experience() {
   return (
     <section id="experience" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-3xl">
-        <h2 className="text-center text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-50">
+        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
           Experience
           <span
             aria-hidden

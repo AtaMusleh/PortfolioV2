@@ -55,18 +55,28 @@ function getServerReducedMotion(): boolean {
 const SPHERE_RADIUS = 2;
 /** Vertical field of view, degrees. Shared by the camera and fitDistance. */
 const FOV = 55;
-/**
- * Half-extents the frame has to contain, in world units. The horizontal one is
- * larger than the sphere radius because a label sprite sticks out well past the
- * point it is anchored to — "OpenStreetMap" is nearly two units wide by itself.
- */
-const HORIZONTAL_EXTENT = 3;
-const VERTICAL_EXTENT = 2.2;
+/** Breathing room past the measured extents, so rounding can never clip. */
+const FIT_MARGIN = 1.08;
 /** World height of a label sprite; width follows from the texture's aspect. */
 const LABEL_HEIGHT = 0.32;
-/** Idle drift, radians per frame. */
-const IDLE_SPIN = 0.0016;
+/**
+ * Seconds for one full idle revolution. Ambient, not spinning.
+ *
+ * Expressed as a period in seconds rather than radians per frame on purpose:
+ * a per-frame figure silently runs at the display's refresh rate, so the same
+ * constant drifts calmly on a 60Hz panel and noticeably faster on a 120 or
+ * 144Hz one. Multiplying by elapsed time makes it identical everywhere.
+ */
+const IDLE_ROTATION_SECONDS = 18;
+/** Radians per second. */
+const IDLE_SPIN = (Math.PI * 2) / IDLE_ROTATION_SECONDS;
 const DRAG_SENSITIVITY = 0.005;
+/** Share of a fling's speed still left one second after release. */
+const MOMENTUM_RETAINED_PER_SECOND = 0.02;
+/** Ceiling on fling speed, radians per second, so a fast swipe can't blur. */
+const MAX_FLING = 6;
+/** A backgrounded tab hands back one huge delta on return; clamp it. */
+const MAX_FRAME_SECONDS = 0.1;
 /** Stops the sphere tipping far enough to turn labels upside down. */
 const MAX_TILT = 0.6;
 
@@ -74,17 +84,28 @@ const MAX_TILT = 0.6;
  * Camera distance that keeps the whole cloud inside the frame at any aspect
  * ratio.
  *
- * A fixed distance crops labels off the sides on a phone: the vertical field of
- * view is what's fixed, so the horizontal one narrows as the viewport does, and
- * the widest labels fall outside it. Deriving distance from whichever axis is
- * tighter lets the sphere fill as much of the frame as it can without ever
- * clipping a label.
+ * Two things go wrong with a fixed distance. Horizontally, the vertical field
+ * of view is what's fixed, so the horizontal one narrows with the viewport and
+ * the widest labels fall outside it on a phone. And a label sprite sticks out
+ * well past the point it is anchored to, by an amount that depends entirely on
+ * how wide the text renders — which varies with the font the visitor actually
+ * has.
+ *
+ * So the extents are not guessed: they are measured from the sprites that were
+ * really built, on this machine, with this font. Deriving the distance from
+ * whichever axis is tighter then makes clipping impossible by construction,
+ * while still letting the sphere fill as much of the frame as it can.
  */
-function fitDistance(aspect: number): number {
+function fitDistance(
+  aspect: number,
+  horizontalExtent: number,
+  verticalExtent: number,
+): number {
   const halfHeight = Math.tan((FOV * Math.PI) / 180 / 2);
   const halfWidth = halfHeight * aspect;
   return (
-    Math.max(HORIZONTAL_EXTENT / halfWidth, VERTICAL_EXTENT / halfHeight) * 1.05
+    Math.max(horizontalExtent / halfWidth, verticalExtent / halfHeight) *
+    FIT_MARGIN
   );
 }
 
@@ -157,7 +178,7 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
 
     const scene = new Scene();
     const camera = new PerspectiveCamera(FOV, width / height, 0.1, 100);
-    camera.position.z = fitDistance(camera.aspect);
+    // Positioned once the sprites exist and their real extents are known.
 
     const renderer = new WebGLRenderer({ alpha: true, antialias: true });
     // Capped: uncapped DPR on a 3x phone screen triples the fill cost for no
@@ -174,13 +195,19 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
     const created: { texture: CanvasTexture; material: SpriteMaterial }[] = [];
     const labelColor = theme === "dark" ? "#ededed" : "#1f1f1f";
 
+    // Widest sprite actually built, in world units. This is what decides how
+    // far the camera has to sit, so it is measured rather than assumed.
+    let widestLabelHalfWidth = 0;
+
     labels.forEach((label, index) => {
       const made = createLabelTexture(label, labelColor);
       if (made === null) return;
 
       const material = new SpriteMaterial({ map: made.texture, transparent: true });
       const sprite = new Sprite(material);
-      sprite.scale.set(LABEL_HEIGHT * made.aspect, LABEL_HEIGHT, 1);
+      const spriteWidth = LABEL_HEIGHT * made.aspect;
+      sprite.scale.set(spriteWidth, LABEL_HEIGHT, 1);
+      widestLabelHalfWidth = Math.max(widestLabelHalfWidth, spriteWidth / 2);
 
       /*
        * Fibonacci sphere: walk y evenly from +1 to -1 and step the angle by the
@@ -201,18 +228,38 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
       created.push({ texture: made.texture, material });
     });
 
+    /*
+     * A label anchored at the sphere's edge reaches SPHERE_RADIUS plus half its
+     * own width. Rotation only moves anchors around that same radius, so this
+     * bound holds for every frame, not just the first one.
+     */
+    const horizontalExtent = SPHERE_RADIUS + widestLabelHalfWidth;
+    const verticalExtent = SPHERE_RADIUS + LABEL_HEIGHT / 2;
+
+    const fitCamera = () => {
+      camera.position.z = fitDistance(
+        camera.aspect,
+        horizontalExtent,
+        verticalExtent,
+      );
+    };
+    fitCamera();
+
     /* --- Interaction -------------------------------------------------- */
 
     const rotation = { x: 0.15, y: 0 };
-    const velocity = { x: 0, y: IDLE_SPIN };
+    /** Left over from a fling, in radians per second. Idle drift is separate. */
+    const momentum = { x: 0, y: 0 };
     let dragging = false;
     let lastX = 0;
     let lastY = 0;
+    let lastMoveTime = performance.now();
 
     const onPointerDown = (event: PointerEvent) => {
       dragging = true;
       lastX = event.clientX;
       lastY = event.clientY;
+      lastMoveTime = performance.now();
       // Capture keeps the drag alive when the pointer leaves the canvas.
       canvas.setPointerCapture(event.pointerId);
     };
@@ -220,17 +267,28 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
     const onPointerMove = (event: PointerEvent) => {
       if (!dragging) return;
 
+      const now = performance.now();
+      const elapsed = Math.max((now - lastMoveTime) / 1000, 0.001);
+      lastMoveTime = now;
+
       const deltaX = event.clientX - lastX;
       const deltaY = event.clientY - lastY;
       lastX = event.clientX;
       lastY = event.clientY;
 
-      // Applied straight to rotation so the cloud tracks the finger exactly;
-      // velocity is recorded only to carry momentum after release.
-      rotation.y += deltaX * DRAG_SENSITIVITY;
-      rotation.x += deltaY * DRAG_SENSITIVITY;
-      velocity.y = deltaX * DRAG_SENSITIVITY;
-      velocity.x = deltaY * DRAG_SENSITIVITY;
+      // Applied straight to rotation, so dragging tracks the pointer exactly
+      // and stays as responsive as before — the idle slowdown is separate.
+      const turnY = deltaX * DRAG_SENSITIVITY;
+      const turnX = deltaY * DRAG_SENSITIVITY;
+      rotation.y += turnY;
+      rotation.x += turnX;
+
+      // Recorded as a rate so the fling that follows release is the speed the
+      // pointer was actually moving, not the size of the last event's step.
+      const clamp = (value: number) =>
+        Math.min(MAX_FLING, Math.max(-MAX_FLING, value));
+      momentum.y = clamp(turnY / elapsed);
+      momentum.x = clamp(turnX / elapsed);
     };
 
     const onPointerUp = (event: PointerEvent) => {
@@ -249,14 +307,23 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
 
     const worldPosition = new Vector3();
     let frame = 0;
+    let previousTime = performance.now();
 
     const renderFrame = () => {
+      const now = performance.now();
+      const elapsed = Math.min((now - previousTime) / 1000, MAX_FRAME_SECONDS);
+      previousTime = now;
+
       if (!dragging) {
-        // Momentum bleeds off and settles back into the idle drift.
-        velocity.y += (IDLE_SPIN - velocity.y) * 0.02;
-        velocity.x *= 0.94;
-        rotation.y += velocity.y;
-        rotation.x += velocity.x;
+        // Any fling decays, then the constant ambient drift underneath it
+        // carries on. Both are per-second, so the pace is the same on a 60Hz
+        // laptop and a 144Hz monitor.
+        const decay = Math.pow(MOMENTUM_RETAINED_PER_SECOND, elapsed);
+        momentum.x *= decay;
+        momentum.y *= decay;
+
+        rotation.y += (momentum.y + IDLE_SPIN) * elapsed;
+        rotation.x += momentum.x * elapsed;
       }
 
       rotation.x = Math.min(MAX_TILT, Math.max(-MAX_TILT, rotation.x));
@@ -286,7 +353,7 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
 
       camera.aspect = nextWidth / nextHeight;
       // Refit, or rotating to portrait would start clipping labels again.
-      camera.position.z = fitDistance(camera.aspect);
+      fitCamera();
       camera.updateProjectionMatrix();
       renderer.setSize(nextWidth, nextHeight);
     });
@@ -335,7 +402,7 @@ export default function SkillCloud({ labels }: SkillCloudProps) {
       <div
         ref={containerRef}
         aria-hidden
-        className="h-[360px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[720px]"
+        className="h-[360px] w-full cursor-grab touch-none select-none active:cursor-grabbing sm:h-[600px]"
       />
       <p className="text-xs text-neutral-500 dark:text-neutral-500">
         Drag to rotate

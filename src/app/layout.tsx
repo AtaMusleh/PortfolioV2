@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import DevGuard from "@/components/DevGuard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { portfolio } from "@/data/portfolio";
@@ -49,6 +50,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             bottom of the viewport on short pages. */}
         <div className="flex flex-1 flex-col pt-16">{children}</div>
         <Footer />
+        {/* Easter egg; renders nothing until a right-click or devtools. */}
+        <DevGuard />
       </body>
     </html>
   );

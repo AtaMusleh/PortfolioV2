@@ -51,3 +51,107 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * Tech-stack marquee (see components/TechStack.tsx).
+ *
+ * CSS rather than JS so the section stays a Server Component. The track holds
+ * two identical rows and shifts by exactly half its width, so the second row
+ * arrives where the first started and the loop is seamless.
+ */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-scroll 50s linear infinite;
+}
+
+/* Pause on hover — a visitor stopping to read a logo shouldn't chase it. */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Fades the logos out at both edges instead of cutting them off mid-glyph. */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+/*
+ * Hover label for each marquee item.
+ *
+ * A ::after on the item itself, filled from `data-label` — no extra DOM and no
+ * JavaScript, so TechStack stays a Server Component.
+ *
+ * It sits above the logo, inside the marquee's vertical padding: the track is
+ * clipped with `overflow: hidden`, and clipping stops at the padding box, so
+ * the padding is the only place a tooltip can escape the row without being cut
+ * off. Hovering also pauses the scroll, so the label holds still to be read.
+ */
+.tech-item::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% - 0.25rem);
+  left: 50%;
+  transform: translate(-50%, 0.25rem);
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background: #171717;
+  color: #fafafa;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+/* Inverted on dark, where a near-black pill would disappear into the page. */
+.dark .tech-item::after {
+  background: #fafafa;
+  color: #171717;
+}
+
+.tech-item:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * Static row. The track is twice the container's width, so it also needs to
+   * scroll manually — otherwise the second half is simply unreachable.
+   */
+  .marquee-track {
+    animation: none;
+  }
+
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .tech-item::after {
+    transition: none;
+  }
+}

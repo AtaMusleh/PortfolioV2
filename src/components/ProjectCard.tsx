@@ -28,10 +28,28 @@ export default function ProjectCard({ project }: { readonly project: Project }) 
      * flex + h-full makes every card in a row the same height, with the link
      * footer pinned to the bottom by `mt-auto`.
      */
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/5 bg-white/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl hover:shadow-brand-purple/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-purple/50">
+      {/*
+       * Opens the detail dialog. It carries no handler — ProjectsView catches
+       * the click by delegation on `data-project-detail`, which keeps this
+       * whole card on the server.
+       *
+       * It has to live *inside* the article. The card's `backdrop-blur`
+       * creates a stacking context, so a trigger placed outside would paint
+       * over the repo and demo links and swallow their clicks no matter what
+       * z-index they carried. In here, the links' `relative z-10` genuinely
+       * beats it and stays clickable.
+       */}
+      <button
+        type="button"
+        data-project-detail={project.id}
+        aria-label={`View details for ${project.name}`}
+        className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-pink"
+      />
+
       {/* Positioned + fixed ratio: required by <Image fill>, and it reserves
           the space so the grid doesn't shift while loading. */}
-      <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden border-b border-black/5 dark:border-white/10">
+      <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden border-b border-black/5 dark:border-white/10">
         <ProjectImage src={project.image} name={project.name} />
       </div>
 
@@ -49,7 +67,12 @@ export default function ProjectCard({ project }: { readonly project: Project }) 
           {project.tagline}
         </p>
 
-        <p className="mt-4 text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
+        {/*
+         * Clamped to two lines: the card is a preview, and the dialog carries
+         * the full text. Clamping rather than shortening the data keeps one
+         * description in portfolio.ts serving both.
+         */}
+        <p className="mt-4 line-clamp-2 text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
           {project.description}
         </p>
 
@@ -77,9 +100,8 @@ export default function ProjectCard({ project }: { readonly project: Project }) 
          * mt-auto pins this row to the card bottom regardless of how long the
          * description above it runs.
          *
-         * `relative z-10` lifts these links above the full-card "view details"
-         * button that ProjectsView lays over the card — without it, that
-         * overlay would swallow every click on a repo or demo link.
+         * `relative z-10` lifts these links above the detail trigger above, so
+         * a repo or demo link opens the site directly instead of the dialog.
          */}
         <div className="relative z-10 mt-auto flex flex-wrap items-center gap-5 pt-6">
           {project.repos.map((repo) => (

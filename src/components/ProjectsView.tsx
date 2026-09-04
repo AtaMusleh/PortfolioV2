@@ -166,8 +166,6 @@ export default function ProjectsView({
   /* --- Pieces ------------------------------------------------------------ */
 
   /**
-   * Card plus the overlay button that opens its details.
-   *
    * `opaque` is for the carousel: ProjectCard is glassmorphic (bg-white/60),
    * and inside a preserve-3d context the card behind shows straight through
    * it — the neighbouring slide's text reads over the featured one. An opaque
@@ -179,19 +177,24 @@ export default function ProjectsView({
         className={`relative h-full ${opaque ? "rounded-2xl bg-white dark:bg-neutral-950" : ""}`}
       >
         {item.card}
-        {/*
-         * A sibling of the card, not a wrapper: the card contains links, and
-         * nesting <a> inside <button> is invalid. This sits over the card, and
-         * ProjectCard raises its link row above it with `relative z-10`.
-         */}
-        <button
-          type="button"
-          onClick={() => setOpenId(item.id)}
-          aria-label={`View details for ${item.name}`}
-          className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink"
-        />
       </div>
     );
+  }
+
+  /**
+   * Opens the dialog for whichever card was clicked.
+   *
+   * Delegated rather than a handler per card: the trigger lives inside
+   * ProjectCard, which is server-rendered and cannot carry a function. Clicks
+   * on a repo or demo link never reach a trigger, so those links work
+   * normally — which is the whole point of the arrangement.
+   */
+  function onCardClick(event: React.MouseEvent) {
+    const trigger = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-project-detail]",
+    );
+    const id = trigger?.dataset.projectDetail;
+    if (id !== undefined) setOpenId(id);
   }
 
   const toggleBase =
@@ -201,7 +204,7 @@ export default function ProjectsView({
     "text-neutral-500 hover:text-brand-pink dark:text-neutral-400 dark:hover:text-brand-purple";
 
   return (
-    <div className="mt-10">
+    <div className="mt-10" onClick={onCardClick}>
       {!reducedMotion && (
         <div className="mb-6 flex items-center justify-end gap-1">
           <button
@@ -251,7 +254,7 @@ export default function ProjectsView({
             onClickCapture={onClickCapture}
             // touch-pan-y keeps vertical page scrolling working over the
             // carousel while horizontal drags are handled here.
-            className="relative h-[800px] touch-pan-y select-none overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink sm:h-[820px]"
+            className="relative h-[640px] touch-pan-y select-none overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-pink sm:h-[720px]"
             style={{ perspective: "1600px" }}
           >
             <ul className="relative h-full [transform-style:preserve-3d]">
