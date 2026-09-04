@@ -59,7 +59,7 @@ const METHODS: readonly ContactMethod[] = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="px-6 py-36 sm:py-52">
+    <section id="contact" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-4xl text-center">
         <h2 className="text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
           Get in touch

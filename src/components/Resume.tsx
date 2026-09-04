@@ -43,9 +43,9 @@ function stripProtocol(url: string): string {
 /** Bold section label with the hairline divider under it. */
 function SectionHeading({ children }: { readonly children: string }) {
   return (
-    <h3 className="mb-4 border-b border-black/10 pb-2 text-sm font-bold uppercase tracking-widest text-neutral-900 dark:border-white/15 dark:text-neutral-100">
+    <h4 className="mb-4 border-b border-black/10 pb-2 text-sm font-bold uppercase tracking-widest text-neutral-900 dark:border-white/15 dark:text-neutral-100">
       {children}
-    </h3>
+    </h4>
   );
 }
 
@@ -88,8 +88,17 @@ export default function Resume() {
   return (
     <section id="resume" className="px-6 py-24 sm:py-32 print:py-0">
       <div className="mx-auto max-w-[45rem]">
+        {/* Same treatment as every other section heading on the page. */}
+        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+          Resume
+          <span
+            aria-hidden
+            className="mx-auto mt-5 block h-1.5 w-24 rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+          />
+        </h2>
+
         {/* Download bar — outside the card, right-aligned, hidden in print. */}
-        <div className="mb-4 flex flex-wrap items-center justify-end gap-2 print:hidden">
+        <div className="mt-12 mb-4 flex flex-wrap items-center justify-end gap-2 print:hidden">
           {DOWNLOADS.map((file) => (
             <a
               key={file.href}
@@ -108,9 +117,9 @@ export default function Resume() {
           {/* Header ---------------------------------------------------- */}
           <header className="flex flex-col gap-5 border-b border-black/10 pb-6 sm:flex-row sm:items-start sm:justify-between dark:border-white/15">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+              <h3 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
                 {personal.name}
-              </h2>
+              </h3>
               {currentRole !== null && (
                 <p className="mt-1 text-base font-medium text-brand-purple">
                   {currentRole}
@@ -192,9 +201,9 @@ export default function Resume() {
                   isLast={index === portfolio.experience.length - 1}
                 >
                   <div className="flex flex-col gap-x-3 sm:flex-row sm:items-baseline sm:justify-between">
-                    <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
+                    <h5 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
                       {job.role}
-                    </h4>
+                    </h5>
                     <span className="shrink-0 text-xs whitespace-nowrap text-neutral-500 dark:text-neutral-500">
                       {job.period}
                     </span>
@@ -240,27 +249,60 @@ export default function Resume() {
                   <div className="flex h-full flex-col rounded-xl border border-black/5 bg-black/[0.02] p-4 dark:border-white/10 dark:bg-white/[0.03]">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
+                        <h5 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
                           {project.name}
-                        </h4>
+                        </h5>
                         {/* The tagline is the project's category line. */}
                         <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-500">
                           {project.tagline}
                         </p>
                       </div>
 
-                      <div className="flex shrink-0 flex-col items-end gap-0.5">
-                        {project.repos.map((repo) => (
-                          <a
-                            key={repo.url}
-                            href={repo.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`${project.name} ${repo.label} on GitHub`}
-                            className="text-xs font-medium text-brand-purple hover:underline"
-                          >
-                            {repo.label}
-                          </a>
+                      {/*
+                       * Repos first, then the live demo when the project has
+                       * one — built as a single list so the dot separators
+                       * fall between links rather than needing a trailing one.
+                       */}
+                      <div className="flex shrink-0 flex-wrap items-center justify-end gap-x-1.5 text-xs">
+                        {[
+                          ...project.repos.map((repo) => ({
+                            key: repo.url,
+                            href: repo.url,
+                            label: repo.label,
+                            // Disambiguates "API" from "Client" for screen
+                            // readers, which read links out of context.
+                            description: `${project.name} ${repo.label} on GitHub`,
+                          })),
+                          ...(project.liveUrl === null
+                            ? []
+                            : [
+                                {
+                                  key: "live",
+                                  href: project.liveUrl,
+                                  label: "Live Demo",
+                                  description: `${project.name} live demo`,
+                                },
+                              ]),
+                        ].map((link, index) => (
+                          <span key={link.key} className="inline-flex items-center gap-x-1.5">
+                            {index > 0 && (
+                              <span
+                                aria-hidden
+                                className="text-neutral-400 dark:text-neutral-600"
+                              >
+                                ·
+                              </span>
+                            )}
+                            <a
+                              href={link.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={link.description}
+                              className="font-medium whitespace-nowrap text-brand-purple hover:underline"
+                            >
+                              {link.label}
+                            </a>
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -295,9 +337,9 @@ export default function Resume() {
                   isLast={index === portfolio.education.length - 1}
                 >
                   <div className="flex flex-col gap-x-3 sm:flex-row sm:items-baseline sm:justify-between">
-                    <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
+                    <h5 className="text-sm font-bold text-neutral-900 dark:text-neutral-50">
                       {entry.degree}
-                    </h4>
+                    </h5>
                     <span className="shrink-0 text-xs whitespace-nowrap text-neutral-500 dark:text-neutral-500">
                       {formatYears(entry.startYear, entry.endYear)}
                     </span>
