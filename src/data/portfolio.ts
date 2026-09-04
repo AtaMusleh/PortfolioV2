@@ -39,6 +39,12 @@ export interface PersonalInfo {
   readonly tagline: string;
   /** About-section bio. Two or three sentences, first person. */
   readonly bio: string;
+  /**
+   * Optional. Nothing renders until it is set — a phone number is not
+   * something to invent, so the resume simply omits the line while it is
+   * absent.
+   */
+  readonly phone?: string;
 }
 
 export interface Education {
@@ -51,6 +57,18 @@ export interface Education {
   /** Four-digit year it ended. Use `null` while still enrolled — the UI
    *  renders that as "Present". */
   readonly endYear: number | null;
+  /**
+   * Optional. Relevant modules as one comma-separated line, e.g.
+   * "Data Structures, Databases, Operating Systems". The resume renders a
+   * coursework line only when this is set.
+   */
+  readonly coursework?: string;
+}
+
+export interface Language {
+  readonly name: string;
+  /** Proficiency as it would read on a CV: "Native", "B2", "Fluent". */
+  readonly level: string;
 }
 
 export interface Experience {
@@ -129,6 +147,8 @@ export interface Portfolio {
   /** One card per group; the word cloud uses every skill across all groups. */
   readonly skills: readonly SkillGroup[];
   readonly projects: readonly Project[];
+  /** Spoken languages, for the resume. */
+  readonly languages: readonly Language[];
   readonly contact: Contact;
 }
 
@@ -149,6 +169,7 @@ export const portfolio: Portfolio = {
     tagline:
       "I build things end to end, and care most about the parts that are easy to get subtly wrong.",
     bio: "I studied computer science at Birzeit University and now build banking software at Experts Turnkey Solutions in Ramallah, working on Appian applications for clients like Jordan Kuwait Bank. The part of the job I actually enjoy is the unglamorous half — validation rules, edge cases, and the things that fail quietly rather than loudly. Away from the keyboard I lift and I game.",
+    phone: "+970 597 332 555",
   },
 
   education: [
@@ -182,6 +203,11 @@ export const portfolio: Portfolio = {
   ],
 
   interests: ["Lifting", "Gaming"],
+
+  languages: [
+    { name: "Arabic", level: "Native" },
+    { name: "English", level: "B2" },
+  ],
 
   skills: [
     { name: "Languages", skills: ["TypeScript", "JavaScript", "SQL"] },

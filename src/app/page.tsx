@@ -4,6 +4,7 @@ import Education from "@/components/Education";
 import Experience from "@/components/Experience";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
+import Resume from "@/components/Resume";
 import Skills from "@/components/Skills";
 import TechStack from "@/components/TechStack";
 
@@ -23,6 +24,7 @@ export default function Home() {
       <TechStack />
       <Projects />
       <Experience />
+      <Resume />
       <Contact />
     </main>
   );
