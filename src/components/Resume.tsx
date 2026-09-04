@@ -89,7 +89,7 @@ export default function Resume() {
     <section id="resume" className="px-6 py-24 sm:py-32 print:py-0">
       <div className="mx-auto max-w-[45rem]">
         {/* Same treatment as every other section heading on the page. */}
-        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-center text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           Resume
           <span
             aria-hidden
@@ -311,7 +311,7 @@ export default function Resume() {
                       {project.stack.map((tech) => (
                         <li
                           key={tech}
-                          className="rounded-full bg-brand-purple/10 px-2 py-0.5 text-[0.6875rem] font-medium text-brand-purple dark:bg-brand-purple/15"
+                          className="rounded-full bg-brand-purple/10 px-2 py-0.5 text-xs font-medium text-brand-purple dark:bg-brand-purple/15"
                         >
                           {tech}
                         </li>

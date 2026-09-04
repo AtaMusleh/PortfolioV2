@@ -61,7 +61,7 @@ export default function Contact() {
   return (
     <section id="contact" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           Get in touch
           <span
             aria-hidden
@@ -69,7 +69,7 @@ export default function Contact() {
           />
         </h2>
 
-        <p className="mt-8 bg-gradient-to-r from-brand-pink to-brand-purple bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl">
+        <p className="mt-12 bg-gradient-to-r from-brand-pink to-brand-purple bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl">
           Let&apos;s work together
         </p>
 

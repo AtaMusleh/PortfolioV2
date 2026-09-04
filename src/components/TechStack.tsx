@@ -103,7 +103,7 @@ export default function TechStack() {
   return (
     <section id="tech-stack" className="px-6 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl">
-        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-center text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           My Tech Stack
           <span
             aria-hidden

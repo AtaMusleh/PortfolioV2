@@ -21,7 +21,7 @@ export default function Education() {
   return (
     <section id="education" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-3xl">
-        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-center text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           Education
           <span
             aria-hidden

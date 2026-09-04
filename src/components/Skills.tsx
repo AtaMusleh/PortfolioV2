@@ -20,7 +20,7 @@ export default function Skills() {
   return (
     <section id="skills" className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-center text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           Skills
           <span
             aria-hidden
@@ -28,7 +28,7 @@ export default function Skills() {
           />
         </h2>
 
-        <div className="mt-10">
+        <div className="mt-12">
           <SkillCloud labels={allSkills} />
         </div>
 
@@ -44,7 +44,7 @@ export default function Skills() {
                   {group.skills.map((skill) => (
                     <li
                       key={skill}
-                      className="rounded-full bg-brand-pink/10 px-4 py-2 text-base font-medium text-brand-pink transition-colors duration-200 dark:bg-brand-purple/15 dark:text-brand-purple"
+                      className="rounded-full bg-brand-pink/10 px-3.5 py-1.5 text-sm font-medium text-brand-pink transition-colors duration-200 dark:bg-brand-purple/15 dark:text-brand-purple"
                     >
                       {skill}
                     </li>

@@ -204,7 +204,7 @@ export default function ProjectsView({
     "text-neutral-500 hover:text-brand-pink dark:text-neutral-400 dark:hover:text-brand-purple";
 
   return (
-    <div className="mt-10" onClick={onCardClick}>
+    <div className="mt-12" onClick={onCardClick}>
       {!reducedMotion && (
         <div className="mb-6 flex items-center justify-end gap-1">
           <button

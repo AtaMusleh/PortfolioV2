@@ -29,7 +29,7 @@ export default function About() {
   return (
     <section id="about" className="px-6 py-24 sm:py-32">
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-        <h2 className="text-[2.75rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.5rem] dark:text-neutral-50">
+        <h2 className="text-[2.5rem] font-extrabold tracking-tight text-neutral-900 sm:text-[3.25rem] dark:text-neutral-50">
           About Me
           {/* Short gradient rule, echoing the hero's palette. */}
           <span
@@ -39,7 +39,7 @@ export default function About() {
         </h2>
 
         {/* Bio card */}
-        <div className="mt-10 w-full rounded-2xl border border-black/5 bg-white/60 p-6 backdrop-blur-sm transition-colors duration-300 sm:p-8 dark:border-white/10 dark:bg-white/5">
+        <div className="mt-12 w-full rounded-2xl border border-black/5 bg-white/60 p-6 backdrop-blur-sm transition-colors duration-300 sm:p-8 dark:border-white/10 dark:bg-white/5">
           <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
             {portfolio.personal.bio}
           </p>
